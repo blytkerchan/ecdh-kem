@@ -21,36 +21,40 @@ def extract(args):
 def generate(args):
     '''Generate a keypair'''
     curve = _CURVES[args.curve]
-    key_pair = SigningHelper(curve).generate_keypair()
+    key_pair = Helper(curve).generate_keypair()
     key_pair.save(args.keyfile, args.password)
 
-def sign(args):
-    '''Sign something'''
+def decrypt(args):
+    '''Decrypt the ciphertext and produce the shared secret'''
     try:
         key_pair = KeyPair.load(args.keyfile, args.password)
     except ValueError as e:
         print(e.message)
         sys.exit(1)
     with open(
-        args.filename, encoding='utf-8'
-        ) if args.filename != '-' else sys.stdin as inp, open(
+        args.ciphertext, encoding='utf-8'
+        ) if args.ciphertext != '-' else sys.stdin as ciphertext_file, open(
         args.output, 'x', encoding='utf-8'
-        ) if args.output != '-' else sys.stdout as outp:
-        SigningHelper.sign(key_pair, inp, outp, args)
+        ) if args.output != '-' else sys.stdout as output_file:
+        ciphertext = ciphertext_file.read()
+        shared_secret = Helper.decrypt(key_pair, ciphertext)
+        output_file.write(shared_secret)
 
-def verify(args):
-    '''Verify the signature on something'''
+def encrypt(args):
+    '''Generate and encrypt a shared secret'''
     with open(args.pubkeyfile, 'r', encoding='utf-8') as pubkeyfile:
         public_key = PublicKey.load(pubkeyfile)
     with open(
-        args.filename,
-        'r',
-        encoding='utf-8') if args.filename != '-' else sys.stdin as f, open(
-            args.signature,
-            'r',
+        args.ciphertext,
+        'x',
+        encoding='utf-8') if args.ciphertext != '-' else sys.stdout as ciphertext_file, open(
+            args.sharedsecret,
+            'x',
             encoding='utf-8'
-            ) as s:
-        sys.exit(0 if SigningHelper.verify(public_key, f, s) else 1)
+            ) as sharedsecret_file:
+        sharedsecret, ciphertext = Helper.encrypt(public_key, args)
+        ciphertext_file.write(ciphertext)
+        sharedsecret_file.write(sharedsecret)
 
 parser = argparse.ArgumentParser(
                     prog='es',
@@ -112,9 +116,9 @@ genparser.add_argument(
     required=True
     )
 genparser.set_defaults(func=generate)
-# sign command arguments
-signparser = subparsers.add_parser('sign')
-signparser.add_argument(
+# decrypt command arguments
+decryptparser = subparsers.add_parser('decrypt')
+decryptparser.add_argument(
     '-k',
     '--keyfile',
     help='File to read the private key from',
@@ -122,7 +126,7 @@ signparser.add_argument(
     type=str,
     required=True
     )
-signparser.add_argument(
+decryptparser.add_argument(
     '-p',
     '--password',
     help='Password to be used for keyfile',
@@ -130,26 +134,53 @@ signparser.add_argument(
     type=str,
     required=True
     )
-signparser.add_argument(
-    '-f',
-    '--filename',
-    help='File to generate a signature for (stdin by default)',
+decryptparser.add_argument(
+    '-c',
+    '--ciphertext',
+    help='File containing the ciphertext of the shared key',
     action='store',
     type=str,
     required=False,
     default='-'
     )
-signparser.add_argument(
+decryptparser.add_argument(
     '-o',
     '--output',
-    help='Output file for (detached) signature (stdout by default)',
+    help='Output file for shared key (stdout by default)',
     action='store',
     type=str,
     required=False,
     default='-'
     )
-signparser.add_argument(
+decryptparser.set_defaults(func=decrypt)
+# encrypt command arguments
+encryptparser = subparsers.add_parser('encrypt')
+encryptparser.add_argument(
+    '-p',
+    '--pubkeyfile',
+    help='File to read the public key from',
+    action='store',
+    type=str,
+    required=True
+    )
+encryptparser.add_argument(
+    '-c',
+    '--ciphertext',
+    help='File to store the ciphertext in',
+    action='store',
+    type=str,
+    required=False,
+    )
+encryptparser.add_argument(
     '-s',
+    '--sharedsecret',
+    help='File containing the shared secret',
+    action='store',
+    type=str,
+    required=True,
+    )
+encryptparser.add_argument(
+    '-S',
     '--sha',
     help='Secure hash algorithm to use for the signature generation',
     action='store',
@@ -158,34 +189,7 @@ signparser.add_argument(
     default='sha256',
     choices=_HASH_ALGORITHMS.keys()
     )
-signparser.set_defaults(func=sign)
-# verify command arguments
-verifyparser = subparsers.add_parser('verify')
-verifyparser.add_argument(
-    '-p',
-    '--pubkeyfile',
-    help='File to read the public key from',
-    action='store',
-    type=str,
-    required=True
-    )
-verifyparser.add_argument(
-    '-f',
-    '--filename',
-    help='File to verify a signature for (stdin by default)',
-    action='store',
-    type=str,
-    required=False,
-    )
-verifyparser.add_argument(
-    '-s',
-    '--signature',
-    help='File containing the (detached) signature',
-    action='store',
-    type=str,
-    required=True,
-    )
-verifyparser.set_defaults(func=verify)
+encryptparser.set_defaults(func=encrypt)
 
 parsed_args = parser.parse_args(args=sys.argv[1:])
 parsed_args.func(parsed_args)

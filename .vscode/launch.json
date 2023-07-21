@@ -21,19 +21,19 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Module decrypt",
-            "type": "python",
-            "request": "launch",
-            "module": "ecdh_kem",
-            "args": ["extract", "-p", "password", "-k", "keyfile", "-c", "ciphertext"],
-            "justMyCode": true
-        },
-        {
             "name": "Python: Module encrypt",
             "type": "python",
             "request": "launch",
             "module": "ecdh_kem",
-            "args": ["verify", "-p", "pubkey", "-o", "ciphertext"],
+            "args": ["encrypt", "-p", "pubkey", "-c", "ciphertext", "-s", "shared"],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Module decrypt",
+            "type": "python",
+            "request": "launch",
+            "module": "ecdh_kem",
+            "args": ["decrypt", "-p", "password", "-k", "keyfile", "-c", "ciphertext", "-o", "out_shared"],
             "justMyCode": true
         }
     ]
