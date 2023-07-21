@@ -13,6 +13,11 @@ jobs:
     - uses: pandoc/actions/setup@main
       with:
         version: 2.19
+    - name: Install TeX Live
+      uses: zauguin/install-texlive@v2
+      with:
+        packages: >
+          l3build latex latex-bin luatex latex-bin-dev
     - uses: dorny/paths-filter@v2
       id: filter
       with:
