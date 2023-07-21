@@ -17,7 +17,7 @@ jobs:
       uses: zauguin/install-texlive@v2
       with:
         packages: >
-          latex latex-bin xetex tcolorbox pgf tools environ
+          latex latex-bin xetex tcolorbox pgf tools environ etoolbox
     - uses: dorny/paths-filter@v2
       id: filter
       with:
