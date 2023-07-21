@@ -17,7 +17,7 @@ jobs:
       uses: zauguin/install-texlive@v2
       with:
         packages: >
-          l3build latex latex-bin luatex latex-bin-dev
+          latex latex-bin xetex
     - uses: dorny/paths-filter@v2
       id: filter
       with:
@@ -25,6 +25,6 @@ jobs:
           paper:
           - 'paper.ipynb'
     - name: build the paper
-      if: steps.filter.outputs.paper == 'true'
+      #if: steps.filter.outputs.paper == 'true'
       run: ./build-site.sh
       shell: bash
