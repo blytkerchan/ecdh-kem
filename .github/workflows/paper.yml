@@ -17,7 +17,7 @@ jobs:
       uses: zauguin/install-texlive@v2
       with:
         packages: >
-          latex latex-bin xetex
+          latex latex-bin xetex tcolorbox
     - uses: dorny/paths-filter@v2
       id: filter
       with:
