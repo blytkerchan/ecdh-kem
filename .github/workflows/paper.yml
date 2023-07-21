@@ -18,6 +18,39 @@ jobs:
       with:
         packages: >
           latex latex-bin xetex tcolorbox pgf tools environ etoolbox pdfcol ltxcmds infwarerr iftex parskip
+          graphicx
+          caption
+          float
+          xcolor 
+          enumerate 
+          geometry 
+          amsmath 
+          amssymb 
+          textcomp 
+          upquote 
+          eurosym 
+          fontenc
+          alphabeta
+          ucs
+          inputenc
+          fontspec
+          unicode-math
+          fancyvrb 
+          grffile 
+          adjustbox 
+          hyperref
+          titling
+          longtable 
+          booktabs  
+          array     
+          calc      
+          enumitem 
+          ulem 
+          soul      
+          mathrsfs
+
+
+
     - uses: dorny/paths-filter@v2
       id: filter
       with:
