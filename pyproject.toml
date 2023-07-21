@@ -5,7 +5,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ecdh_signatures"
+name = "ecdh_kem"
 version = "0.0.1-dev"
 dependencies = [
     "argparse",
@@ -16,4 +16,4 @@ dependencies = [
     ]
 
 [project.scripts]
-es = "ecdh_signatures:__main__"
+kem = "ecdh_kem:__main__"
