@@ -1,0 +1,26 @@
+name: CI
+
+on:
+ schedule:
+ - cron: 0 4 * * *
+ push:
+  branches:
+    - "*"
+ workflow_dispatch: {}
+
+jobs:
+  build-wheel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: build the wheel
+      run: ./build-wheel.sh
+      shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ecdh_kem
+        path: dist/
+        if-no-files-found: error

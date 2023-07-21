@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Module generate",
+            "type": "python",
+            "request": "launch",
+            "module": "ecdh_kem",
+            "args": ["generate", "-p", "password", "-k", "keyfile"],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Module extract",
+            "type": "python",
+            "request": "launch",
+            "module": "ecdh_kem",
+            "args": ["extract", "-p", "password", "-k", "keyfile", "-o", "pubkey"],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Module decrypt",
+            "type": "python",
+            "request": "launch",
+            "module": "ecdh_kem",
+            "args": ["extract", "-p", "password", "-k", "keyfile", "-c", "ciphertext"],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Module encrypt",
+            "type": "python",
+            "request": "launch",
+            "module": "ecdh_kem",
+            "args": ["verify", "-p", "pubkey", "-o", "ciphertext"],
+            "justMyCode": true
+        }
+    ]
+}
