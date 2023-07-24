@@ -1,0 +1,13 @@
+((*- extends 'latex/index.tex.j2' -*))
+
+((* block abstract *))
+((* if 'abstract' in nb.metadata *))
+\abstract{((( nb.metadata.abstract )))}
+((* endif *))
+((* endblock abstract *))
+
+
+((* block bibliography *))
+\bibliographystyle{ieeetr}
+\bibliography{paper}
+((* endblock bibliography *))
