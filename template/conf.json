@@ -1,5 +1,5 @@
 {
-  "base_template": "base",
+  "base_template": "latex",
   "mimetypes": {
     "text/latex": true,
     "text/tex": true,
