@@ -17,3 +17,6 @@ dependencies = [
 
 [project.scripts]
 kem = "ecdh_kem:__main__"
+
+[tool.setuptools]
+py-modules = ["ecdh_kem"]
