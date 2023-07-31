@@ -1,0 +1,7 @@
+((*- extends 'latex/base.tex.j2' -*))
+
+((* block packages *))
+((( super() )))
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\par\em}
+((* endblock packages *))
